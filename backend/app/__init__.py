@@ -1,0 +1,30 @@
+from flask import Flask,session
+from flask_sqlalchemy import SQLAlchemy
+
+
+db = SQLAlchemy()
+
+def create_app():
+    """
+    创建flask应用对象
+    :param config_name:
+    :return:
+    """
+    app=Flask(__name__,template_folder='templates')
+    app.config['SQLALCHEMY_DATABASE_URI']="mysql://root:root@localhost/movieweb"
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=True
+    app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN']=True
+    app.secret_key='123456'
+    #初始化db
+    db.init_app(app)
+
+    from flask_migrate import Migrate as migrate
+    # 实例化迁移对象
+    grate = migrate(app, db)
+
+    #注册蓝图
+    from . import api_v1_0
+    app.register_blueprint(api_v1_0.api,url_prefix="/api/v1.0")
+
+    return app
+
