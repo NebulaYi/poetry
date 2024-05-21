@@ -128,7 +128,7 @@ def logoutCheck():
         return fd(code=2, msg="登出失败")
 
 
-@api.route("/user/history",Methods=["GET"])
+@api.route("/user/history",methods=["GET"])
 def getHistory():
     """
     TODO:获取历史列表

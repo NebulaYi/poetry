@@ -21,7 +21,7 @@ class Records(db.Model):
     __tablename__="records"
     id=db.Column(db.Integer,autoincrement=True,primary_key=True)
     email = db.Column(db.String(40))
-    style=db.Column(db.Strin(20))
+    style=db.Column(db.String(20))
     functionName=db.Column(db.String(40))
     model_type=db.Column(db.String(40))
     description=db.Column(db.String(255))
