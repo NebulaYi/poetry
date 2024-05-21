@@ -1,4 +1,5 @@
 from flask import Flask,session
+from flask_jwt_extended import JWTManager
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -14,6 +15,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI']="mysql://root:root@localhost/movieweb"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=True
     app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN']=True
+    app.config['JWT_SECRET_KEY'] = 'my_secret_key'
     app.secret_key='123456'
     #初始化db
     db.init_app(app)
@@ -21,6 +23,7 @@ def create_app():
     from flask_migrate import Migrate as migrate
     # 实例化迁移对象
     grate = migrate(app, db)
+    jwt = JWTManager(app)
 
     #注册蓝图
     from . import api_v1_0
