@@ -20,7 +20,7 @@
 <script>
 import { ElMessage, ElDropdown, ElDropdownMenu, ElDropdownItem, ElIcon } from 'element-plus'
 import { ArrowDown } from '@element-plus/icons-vue'
-import router from '../router/index.js' // 确保引入你的 Vue Router 实例
+import router from '../router' // 确保引入你的 Vue Router 实例
 
 export default {
   name: 'Header',
