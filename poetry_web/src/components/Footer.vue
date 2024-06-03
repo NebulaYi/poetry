@@ -12,6 +12,10 @@
   
   <style>
   .footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     text-align: center;
     padding: 1rem;
     background-color: #f5f5f5;

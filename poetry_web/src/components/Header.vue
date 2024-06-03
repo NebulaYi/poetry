@@ -9,7 +9,7 @@
         <el-dropdown-menu>
           <el-dropdown-item command="a" @click="openChangePasswordDialog">修改密码</el-dropdown-item>
           <el-dropdown-item command="b">修改信息</el-dropdown-item>
-          <el-dropdown-item command="c">历史记录</el-dropdown-item>
+          <el-dropdown-item command="c">{{ dynamicHistoryText }}</el-dropdown-item>
           <el-dropdown-item command="d" divided @click="handleLogout">登出</el-dropdown-item>
         </el-dropdown-menu>
       </template>
@@ -79,6 +79,13 @@ export default {
         newPwd2: ''
       },
       newName: '',
+      historyText: '历史记录', // 初始化显示文本
+    }
+  },
+  computed: {
+    dynamicHistoryText() {
+      // 根据当前路由判断显示文本
+      return this.$route.path === '/history' ? '回到首页' : '历史记录';
     }
   },
   methods: {
@@ -91,7 +98,13 @@ export default {
           this.dialogFormVisible2 = true;
           break;
         case 'c':
-          router.push('/history');
+          // 如果当前路径是 '/history'，则跳转到首页
+          if (this.$route.path === '/history') {
+            router.push('/home');
+          } else {
+            // 否则，跳转到历史记录页面
+            router.push('/history');
+          }
           break;
         case 'd':
           this.handleLogout();
