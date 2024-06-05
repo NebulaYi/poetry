@@ -51,5 +51,5 @@
     margin-right: 0.5rem;
     cursor: pointer;
   }
-  </style>
+</style>
   
