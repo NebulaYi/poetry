@@ -1,12 +1,10 @@
 <template>
   <div class="navbarContainer">
-    <nav class="navbar1">
-      <ul>
-        <!-- 第一排选择：智能作诗、藏头诗 -->
-        <li @click="selectType('智能作诗')" :class="{ active: currentType === '智能作诗' }">智能作诗</li>
-        <li @click="selectType('藏头诗')" :class="{ active: currentType === '藏头诗' }">藏头诗</li>
-      </ul>
-    </nav>
+    <!-- 第一排选择：智能作诗、藏头诗 -->
+    <el-row class="navbar1">
+      <el-col :span="12"><li @click="selectType('智能作诗')" :class="{ active: currentType === '智能作诗' }">智能作诗</li></el-col>
+      <el-col :span="12"><li @click="selectType('藏头诗')" :class="{ active: currentType === '藏头诗' }">藏头诗</li></el-col>
+    </el-row>
     <nav class="navbar2">
       <ul>
         <!-- 第二排选择：诗歌体裁 -->
@@ -48,15 +46,13 @@ export default {
 }
 
 .navbar1 {
-  background-color: #9c2e33;
+  background-color: transparent;
   color: white;
   width: 100%;
+  margin: 20px;
 }
-
-.navbar1 ul {
-  list-style-type: none;
-  display: flex;
-  justify-content: center; /* 水平居中排列 */
+.el-col {
+  border-radius: 10px;
 }
 
 .navbar1 li {
@@ -64,17 +60,17 @@ export default {
   cursor: pointer;
   text-align: center; /* 文本居中 */
   padding: 0.5rem 1rem;
-  margin: 0 0.5rem; /* 为按钮添加外边距 */
-  background-color: #9c2e33; /* 背景色 */
-  transition: background-color 0.3s; /* 平滑过渡背景色变化 */
+  background-color: rgba(140, 238, 194, 0.68); /* 背景色 */
+  border-radius: 10px;
+  //transition: background-color 0.3s; /* 平滑过渡背景色变化 */
 }
 
 .navbar1 li:hover {
-  background-color: rgba(124, 30, 35, 0.26); /* 鼠标悬浮时更深的背景色 */
+  background-color: rgba(140, 238, 194, 0.68); /* 鼠标悬浮时更深的背景色 */
 }
 
 .navbar1 .active {
-  background-color: #fc071a; /* 选中时更深的背景色 */
+  background-color: #33c5cb; /* 选中时更深的背景色 */
 }
 
 .navbar2 {
