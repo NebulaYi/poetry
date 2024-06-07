@@ -1,10 +1,12 @@
 from flask import Flask,session
-from flask_jwt_extended import JWTManager
+
 from flask_sqlalchemy import SQLAlchemy
 
+from flask_jwt_extended import JWTManager
+
+from flask_migrate import Migrate as migrate
 
 db = SQLAlchemy()
-
 def create_app():
     """
     创建flask应用对象
@@ -20,7 +22,6 @@ def create_app():
     #初始化db
     db.init_app(app)
 
-    from flask_migrate import Migrate as migrate
     # 实例化迁移对象
     grate = migrate(app, db)
     jwt = JWTManager(app)
