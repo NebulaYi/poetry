@@ -18,7 +18,7 @@
     right: 0;
     text-align: center;
     padding: 1rem;
-    background-color: #f5f5f5;
+    background-color: transparent;
   }
   </style>
   

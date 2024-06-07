@@ -73,6 +73,11 @@ export default {
   width: 50%;
   height: 300px;
   background-color: #bb9c1d;
+
+  background-image: url('../assets/display.jpg'); /* 替换为你的图片路径 */
+  background-size: 100% 100%; /* 使背景图覆盖整个元素 */
+  background-repeat: no-repeat; /* 背景图不重复 */
+  background-position: center center; /* 背景图居中显示 */
 }
 
 .poem-title {

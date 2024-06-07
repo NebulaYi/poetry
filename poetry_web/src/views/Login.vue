@@ -12,8 +12,8 @@
           </div>
         </template>
         <el-form :model="user" :rules="rules" label-width="auto" ref="user">
-          <el-form-item prop="user_name" label="用户名">
-            <el-input prefix-icon="User" v-model="user.user_name" clearable placeholder="请输入用户名"></el-input>
+          <el-form-item prop="user_name" label="账号">
+            <el-input prefix-icon="User" v-model="user.user_email" clearable placeholder="请输入账号"></el-input>
           </el-form-item>
           <el-form-item prop="user_password" label="密码">
             <el-input prefix-icon="Lock" v-model="user.user_password" clearable type="password" placeholder="请输入密码"></el-input>
@@ -36,13 +36,13 @@ export default {
       fullHeight: document.documentElement.clientHeight,
       // 初始化用户数据
       user: {
-        user_name: '',
+        user_email: '',
         user_password: ''
       },
       rules: {
-        user_name: [{
+        user_email: [{
           required: true,
-          message: '请输入用户名',
+          message: '请输入账号',
           trigger: 'blur'
         }],
         user_password: [{

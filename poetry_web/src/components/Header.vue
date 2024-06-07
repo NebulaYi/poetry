@@ -3,11 +3,11 @@
     <!-- 右上角用户设置 -->
     <el-dropdown @command="handleCommand">
       <span class="el-dropdown-link">
-        userName<el-icon class="el-icon--right"><ArrowDown /></el-icon>
+        {{ $store.state.user.uName }}<el-icon class="el-icon--right"><ArrowDown /></el-icon>
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item command="a" @click="openChangePasswordDialog">修改密码</el-dropdown-item>
+          <el-dropdown-item command="a">修改密码</el-dropdown-item>
           <el-dropdown-item command="b">修改信息</el-dropdown-item>
           <el-dropdown-item command="c">{{ dynamicHistoryText }}</el-dropdown-item>
           <el-dropdown-item command="d" divided @click="handleLogout">登出</el-dropdown-item>
@@ -38,7 +38,7 @@
 
     <!-- 修改信息（昵称）对话框 -->
     <el-dialog v-model="dialogFormVisible2" title="修改信息" width="500">
-      <span>username: </span>
+      <span>当前昵称: {{ $store.state.user.uName }}</span>
       <el-input v-model="newName" type="uname" autocomplete="off" />
       <template v-slot:footer>
         <span class="dialog-footer">
@@ -89,34 +89,38 @@ export default {
     }
   },
   methods: {
+    /*
+    处理下拉设置的逻辑
+     */
     handleCommand(command) {
       switch (command) {
-        case 'a':
-          this.openChangePasswordDialog();
+        case 'a'://显示密码修改框
+          this.dialogFormVisible1 = true;
           break;
-        case 'b':
+        case 'b'://显示用户名修改框s
           this.dialogFormVisible2 = true;
           break;
-        case 'c':
+        case 'c'://历史记录查看
           // 如果当前路径是 '/history'，则跳转到首页
           if (this.$route.path === '/history') {
             router.push('/home');
           } else {
-            // 否则，跳转到历史记录页面
+            // 否则，跳转到历史记录页
             router.push('/history');
           }
           break;
-        case 'd':
+        case 'd'://退出登录
           this.handleLogout();
           break;
       }
     },
-    openChangePasswordDialog() {
-      this.dialogFormVisible1 = true;
-    },
+    /*
+    退出登录函数
+     */
     handleLogout() {
-      // 执行登出逻辑，比如清除本地存储的 token
+      // 执行登出逻辑，比如清除本地存储的token
       this.clearAuthToken();
+      //清除本地用户信息
       ElMessage('已成功登出账号！');
       router.push('/login');
     },
@@ -124,20 +128,50 @@ export default {
       // 清除token的逻辑
       // 例如: localStorage.removeItem('token');
     },
-    confirmPasswordChange() {
-      if (this.codeForm.newPwd1 === this.codeForm.newPwd2) {
-        // 密码匹配，提交更改
-        ElMessage.success('密码修改成功！');
-        this.dialogFormVisible1 = false;
-        // 这里可以添加提交新密码到服务器的代码
-      } else {
-        // 密码不匹配，提示用户
-        ElMessage.error('两次输入的密码不一致');
+    /*
+    提交密码修改
+     */
+    async confirmPasswordChange() {
+      if(this.codeForm.oldPwd === this.$store.state.user.uPwd){
+        if (this.codeForm.newPwd1 === this.codeForm.newPwd2) {
+          // // 密码匹配，提交更改
+          // const respCode = await put('', this.codeForm);
+          // if(respCode.code === 1){
+          //   ElMessage.success('密码修改成功！');
+          //   //更新存储的用户密码
+          //   this.$store.state.user.uPwd = this.codeForm.newPwd1;
+          //   this.dialogFormVisible1 = false;
+          // }else{
+          //   ElMessage.error(respCode.msg);
+          // }
+
+        } else {
+          // 密码不匹配，提示用户
+          ElMessage.error('两次输入的密码不一致');
+        }
+      } else{
+        // 原密码错误
+        ElMessage.success('原密码错误！');
       }
     },
-    confirmNameChange() {
-      ElMessage.success(this.newName + '信息修改成功！');
-      this.dialogFormVisible2 = false;
+    /*
+    提交用户名修改
+     */
+    async confirmNameChange() {
+      if(this.newName){
+        // 输入不为空，提交更改
+        // const respName = await put('', this.newName);
+        // if(respName.code === 1){
+        //   ElMessage.success(this.newName + '信息修改成功！');
+        //   //更新存储的用户名
+        //   this.$store.state.user.uName = this.newName;
+        //   this.dialogFormVisible2 = false;
+        // }else{
+        //   ElMessage.error(respName.msg);
+        // }
+      } else{
+        ElMessage.error('姓名不得为空！');
+      }
     },
   }
 }
@@ -149,7 +183,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  background-color: #f5f5f5;
+  background-color: transparent;
 }
 .el-dropdown-link {
   display: flex;

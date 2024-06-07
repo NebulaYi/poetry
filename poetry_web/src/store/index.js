@@ -2,11 +2,16 @@ import { createStore } from 'vuex'
 
 export default createStore({
     state: {
-        userInfo: {}
+        user: {
+            uName: 'user@email.com',
+            uEmail: '',
+            uPwd: '',
+            access_token: ''
+        }
     },
     mutations: {
         setUserInfo(state, userInfo) {
-            state.userInfo = userInfo;
+            state.user = userInfo;
         }
     },
     actions: {
