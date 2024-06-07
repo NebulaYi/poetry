@@ -4,24 +4,21 @@
   </div>
   <div class="homeView">
     <Header />
-    <InputArea />
-    <ResultArea />
+    <Generate />
     <Footer />
   </div>
 </template>
 
 <script>
 import Header from "../components/Header.vue";
-import InputArea from '../components/InputArea.vue';
-import ResultArea from '../components/ResultArea.vue';
 import Footer from '../components/Footer.vue';
+import Generate from "@/components/Generate.vue";
 
 export default {
   name: 'Home',
   components: {
     Header,
-    InputArea,
-    ResultArea,
+    Generate,
     Footer
   },
   data(){

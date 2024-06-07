@@ -52,7 +52,7 @@ export default {
   methods: {
     handleRegister() {
       // 实现注册逻辑
-      this.$router.push('/login')
+      this.$router.push('/home')
     },
     // 处理设备宽高
     handleResize () {

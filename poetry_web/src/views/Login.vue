@@ -12,8 +12,8 @@
           </div>
         </template>
         <el-form :model="user" :rules="rules" label-width="auto" ref="user">
-          <el-form-item prop="user_name" label="账号">
-            <el-input prefix-icon="User" v-model="user.user_email" clearable placeholder="请输入账号"></el-input>
+          <el-form-item prop="user_email" label="账号">
+            <el-input prefix-icon="User" v-model="user.user_email" clearable type="email" placeholder="请输入账号"></el-input>
           </el-form-item>
           <el-form-item prop="user_password" label="密码">
             <el-input prefix-icon="Lock" v-model="user.user_password" clearable type="password" placeholder="请输入密码"></el-input>
@@ -71,8 +71,10 @@ export default {
       console.log('curWidth=' + this.curWidth + ',curHeight=' + this.curHeight)
     },
     login () {
-      sessionStorage.setItem("username", this.user.user_name)
+      sessionStorage.setItem("user_email", this.user.user_email)
+      console.log(sessionStorage.getItem("user_email"))
       this.$router.push('/home')
+      console.log(sessionStorage.getItem("user_email"))
     },
     register () {
       this.$router.push('/register')

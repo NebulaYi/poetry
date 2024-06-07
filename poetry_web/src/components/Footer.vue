@@ -1,6 +1,7 @@
 <template>
     <footer class="footer">
       <p>项目管理-03</p>
+      <p>项目管理-03</p>
     </footer>
   </template>
   

@@ -51,21 +51,13 @@
 </template>
 
 <script>
-import { ElMessage, ElDropdown, ElDropdownMenu, ElDropdownItem, ElIcon, ElDialog, ElForm, ElFormItem, ElInput } from 'element-plus'
 import { ArrowDown } from '@element-plus/icons-vue'
 import router from '../router'
+import {put} from '@/axios/http'
 
 export default {
   name: 'Header',
   components: {
-    ElDropdown,
-    ElDropdownMenu,
-    ElDropdownItem,
-    ElIcon,
-    ElDialog,
-    ElForm,
-    ElFormItem,
-    ElInput,
     ArrowDown
   },
   data() {
@@ -121,8 +113,8 @@ export default {
       // 执行登出逻辑，比如清除本地存储的token
       this.clearAuthToken();
       //清除本地用户信息
-      ElMessage('已成功登出账号！');
       router.push('/login');
+      this.$message('已成功登出账号！');
     },
     clearAuthToken() {
       // 清除token的逻辑
@@ -134,24 +126,24 @@ export default {
     async confirmPasswordChange() {
       if(this.codeForm.oldPwd === this.$store.state.user.uPwd){
         if (this.codeForm.newPwd1 === this.codeForm.newPwd2) {
-          // // 密码匹配，提交更改
-          // const respCode = await put('', this.codeForm);
-          // if(respCode.code === 1){
-          //   ElMessage.success('密码修改成功！');
-          //   //更新存储的用户密码
-          //   this.$store.state.user.uPwd = this.codeForm.newPwd1;
-          //   this.dialogFormVisible1 = false;
-          // }else{
-          //   ElMessage.error(respCode.msg);
-          // }
+          // 密码匹配，提交更改
+          const respCode = await put('', this.codeForm);
+          if(respCode.code === 1){
+            this.$message.success('密码修改成功！');
+            //更新存储的用户密码
+            this.$store.state.user.uPwd = this.codeForm.newPwd1;
+            this.dialogFormVisible1 = false;
+          }else{
+            this.$message.error(respCode.msg);
+          }
 
         } else {
           // 密码不匹配，提示用户
-          ElMessage.error('两次输入的密码不一致');
+          this.$message.error('两次输入的密码不一致');
         }
       } else{
         // 原密码错误
-        ElMessage.success('原密码错误！');
+        this.$message.error('原密码错误！');
       }
     },
     /*
@@ -170,7 +162,7 @@ export default {
         //   ElMessage.error(respName.msg);
         // }
       } else{
-        ElMessage.error('姓名不得为空！');
+        this.$message.error('姓名不得为空！');
       }
     },
   }
