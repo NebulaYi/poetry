@@ -137,7 +137,7 @@ export default {
       } else if(this.currentType === '藏头诗'){
         //this.$message('藏头诗生成')
         //传输数据
-        const respAcrGenerate = await post('/api/v1.0/poetry/acrosticGenerate', {email: this.$store.state.user.uEmail, keyword: this.inputText, style: this.currentStyle});
+        const respAcrGenerate = await post('/api/v1.0/poetry/acrosticGenerate', {email: "806592733@qq.com", keyword: this.inputText, style: this.currentStyle});
         if (respAcrGenerate.code === 1){
           this.$message.success('生成成功')
           console.log(respAcrGenerate)
@@ -232,7 +232,7 @@ export default {
   cursor: pointer;
   text-align: center; /* 文本居中 */
   padding: 0.5rem 1rem;
-  background-color: rgba(140, 238, 194, 0.68); /* 背景色 */
+  background-color: rgba(132, 110, 78, 0.6); /* 背景色 */
   border-radius: 10px;
   height:32px;
 //transition: background-color 0.3s; /* 平滑过渡背景色变化 */
@@ -243,7 +243,7 @@ export default {
 }
 
 .navbar1 .active {
-  background-color: #33c5cb; /* 选中时更深的背景色 */
+  background-color: rgb(55, 114, 25); /* 选中时更深的背景色 */
 }
 
 /*
@@ -281,7 +281,7 @@ export default {
 }
 
 .navbar2 .active {
-  background-color: #9c2e33; /* 选中时的背景色 */
+  background-color: rgb(55, 114, 25); /* 选中时的背景色 */
   color: white;
 }
 
@@ -306,7 +306,7 @@ export default {
 }
 
 /*
-结果展示
+结果
  */
 .result-area {
   display: flex;

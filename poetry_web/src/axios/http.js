@@ -1,18 +1,18 @@
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: 'http://10.135.2.25:5000',
-    // baseURL: 'http://139.155.154.251',
+    //baseURL: 'http://10.135.2.25:5000',
+    baseURL: 'http://127.0.0.1:5000',
     // timeout: 3000,
 });
 
 
 // 添加请求拦截器
 instance.interceptors.request.use(function (config) {
-    let token = localStorage.getItem('token')
-    if (token){
-        config.headers['token'] = token
-    }
+    // let token = localStorage.getItem('token')
+    // if (token){
+    //     config.headers['token'] = token
+    // }
     // 在发送请求之前做些什么
     return config;
 }, function (error) {
@@ -56,3 +56,4 @@ export const put = (url, data = {}) => {
         })
     })
 }
+

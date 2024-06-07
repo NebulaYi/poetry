@@ -1,5 +1,7 @@
 <template>
   <header class="header">
+
+    <el-button @click="test">test</el-button>
     <!-- 右上角用户设置 -->
     <el-dropdown @command="handleCommand">
       <span class="el-dropdown-link">
@@ -53,7 +55,8 @@
 <script>
 import { ArrowDown } from '@element-plus/icons-vue'
 import router from '../router'
-import {put} from '@/axios/http'
+import {put, get} from '@/axios/http'
+//import axios from "axios";
 
 export default {
   name: 'Header',
@@ -81,6 +84,17 @@ export default {
     }
   },
   methods: {
+    async test(){
+      const r = await get('/api/v1.0/test')
+      console.log(r)
+      if(r.code === 1){
+        this.$message.success(111);
+      }else{
+        this.$message.error(r.msg);
+      }
+    },
+
+
     /*
     处理下拉设置的逻辑
      */
@@ -127,7 +141,21 @@ export default {
       if(this.codeForm.oldPwd === this.$store.state.user.uPwd){
         if (this.codeForm.newPwd1 === this.codeForm.newPwd2) {
           // 密码匹配，提交更改
-          const respCode = await put('', this.codeForm);
+          // try {
+          //   await axios.post('http://10.135.2.25:5000/api/v1.0/user/modifyPassword', {
+          //     email: "user@email.com",
+          //     originPsw: "password",
+          //     currentPsw: "password1"
+          //   });
+          //
+          // } catch (error) {
+          //   console.error('密码数据出错:', error);
+          // }
+          const respCode = await put('/api/v1.0/user/modifyPassword', {
+            email: "user@email.com",
+            originPsw: "password",
+            currentPsw: "password1"
+          });
           if(respCode.code === 1){
             this.$message.success('密码修改成功！');
             //更新存储的用户密码

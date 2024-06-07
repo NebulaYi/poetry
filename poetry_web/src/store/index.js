@@ -5,8 +5,7 @@ export default createStore({
         user: {
             uName: 'user@email.com',
             uEmail: '',
-            uPwd: '',
-            access_token: ''
+            uPwd: '1'
         }
     },
     mutations: {
