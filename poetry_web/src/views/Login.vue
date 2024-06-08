@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import {post} from "@/axios/http";
 
 export default {
   data () {
@@ -70,11 +71,32 @@ export default {
       this.curHeight = this.fullHeight + 'px'
       console.log('curWidth=' + this.curWidth + ',curHeight=' + this.curHeight)
     },
-    login () {
-      sessionStorage.setItem("user_email", this.user.user_email)
-      console.log(sessionStorage.getItem("user_email"))
-      this.$router.push('/home')
-      console.log(sessionStorage.getItem("user_email"))
+    /*
+    登录
+     */
+    async login () {
+      try {
+        const response = await post("/api/v1.0/user/login", {
+          email: this.user.user_email,
+          password: this.user.user_password,
+        });
+        console.log("登录："+response)
+        if (response.code === 1) {
+          sessionStorage.setItem("uName", response.data.username)
+          sessionStorage.setItem("uEmail", response.data.email)
+          sessionStorage.setItem("uPassword", response.data.password)
+          console.log("用户名："+sessionStorage.getItem("uName"))
+          console.log("账号："+sessionStorage.getItem("uEmail"))
+          console.log("密码："+sessionStorage.getItem("uPassword"))
+          this.$router.push('/home')
+          this.$message.success("登录成功！");
+        } else {
+          this.$message.error("登陆失败！"+response.msg);
+        }
+      } catch (error) {
+        console.log("loginlogin")
+        console.error(error);
+      }
     },
     register () {
       this.$router.push('/register')

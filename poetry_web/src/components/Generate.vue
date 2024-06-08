@@ -32,11 +32,11 @@
 
     <!-- 结果展示 -->
     <div class="result-area">
-      <!-- 展示诗歌标题 -->
-      <h1 class="poem-title">{{ poem.title }}</h1>
+      <!-- 标题 -->
+      <h1 class="poem-title">欢迎使用</h1>
       <!-- 展示诗歌内容，当没有数据或正在加载时不显示 -->
       <div class="poem-content" >
-        <div v-if="poem.lines">
+        <div v-if="poem">
           <p v-for="(line, index) in formattedLines" :key="index" class="poem-line">
             {{ line }}
           </p>
@@ -56,7 +56,7 @@
 
 <script>
 import { ElMessage } from 'element-plus'
-import {post, put} from "@/axios/http";
+import {post} from "@/axios/http";
 export default {
   name: 'InputArea',
   data() {
@@ -67,17 +67,16 @@ export default {
 
       inputText: '', // 用于绑定输入框的文本
 
-      poem: {
-        title: '欢迎使用', // 初始欢迎消息
-        lines: ''
-      }, // 用于存储从后端接收的诗歌数据
+      poem: '', // 用于存储从后端接收的诗歌数据
       loading: false, // 加载状态
+
+      u_email: sessionStorage.getItem("uEmail"),
     };
   },
   computed: {
     formattedLines() {
       // 如果存在诗句，按'。'分割并去除空白，否则返回空数组
-      return this.poem.lines ? this.poem.lines.split('。').map(part => part.trim()) : [];
+      return this.poem ? this.poem.split('。').map(part => part.trim()) : [];
     }
   },
   methods: {
@@ -134,36 +133,41 @@ export default {
         // 如果藏头诗输入字数不够，设置错误提示信息
         ElMessage.error('请输入完整内容');
         return; // 阻止进一步的诗歌生成
-      } else if(this.currentType === '藏头诗'){
-        //this.$message('藏头诗生成')
-        //传输数据
-        const respAcrGenerate = await post('/api/v1.0/poetry/acrosticGenerate', {email: "806592733@qq.com", keyword: this.inputText, style: this.currentStyle});
-        if (respAcrGenerate.code === 1){
-          this.$message.success('生成成功')
-          console.log(respAcrGenerate)
-          console.log(respAcrGenerate.data)
-          //将数据传至结果显示组件
-          //this.$router.push({name: 'ResultArea', query: {poem: respAcrGenerate.data}});
-        }else {
-          this.$message.error("生成失败")
+      }
+
+      // 设置加载状态为 true
+      this.poem = '';
+      this.loading = true;
+
+      // 根据选择的诗歌类型生成诗歌
+      let poemData;
+      if (this.currentType === '智能作诗') {
+        const respCusGenerate = await post('/api/v1.0/poetry/customizeGenerate', {email: this.u_email, keyword: this.inputText, style: this.currentStyle});
+        if (respCusGenerate.code === 1) {
+          this.$message.success('生成成功');
+          poemData = respCusGenerate.data;
+        } else {
+          this.$message.error("生成失败");
+          this.loading = false; // 后端返回错误时，取消加载状态
+          return;
         }
-      } else if(this.currentType === '智能作诗'){
-        this.$message('自定义诗词生成')
-        //传输数据
-        const respCusGenerate = await put('', {email: this.$store.state.user.email, keyword: this.inputText, style: this.currentStyle});
-        if (respCusGenerate.code === 1){
-          this.$message.success('生成成功')
-          console.log(respCusGenerate)
-          //将数据传至结果显示组件
-          this.$router.push({name: 'ResultArea', query: {poem: respCusGenerate.data}});
-        }else {
-          this.$message.error("生成失败")
+      } else if (this.currentType === '藏头诗') {
+        const respAcrGenerate = await post('/api/v1.0/poetry/acrosticGenerate', {email: this.u_email, keyword: this.inputText, style: this.currentStyle});
+        if (respAcrGenerate.code === 1) {
+          this.$message.success('生成成功');
+          poemData = respAcrGenerate.data;
+        } else {
+          this.$message.error("生成失败");
+          this.loading = false; // 后端返回错误时，取消加载状态
+          return;
         }
       }
-      // 这里使用setTimeout模拟异步请求
-      setTimeout(() => {
-        this.$emit('generate', { text: this.inputText, type: this.currentType, style: this.currentStyle }); // 触发事件，传递输入的文本和选择
-      }, 1000);
+
+      // 更新诗歌数据并取消加载状态
+      this.updatePoemData(poemData);
+
+      // 触发事件，传递输入的文本和选择
+      this.$emit('generate', { text: this.inputText, type: this.currentType, style: this.currentStyle });
     },
     reset() {
       this.inputText = '';  // 重置输入框文本
@@ -173,23 +177,23 @@ export default {
     /*
     结果展示
      */
-    updatePoemData(title, lines) {
-      this.poem = { title, lines: lines + '。' }; // 更新诗歌数据
+    updatePoemData(poem) {
+      this.poem = poem; // 更新诗歌数据
       this.loading = false; // 数据加载完成后，停止加载动画
     },
     resetPoemData() {
-      this.poem = { title: '欢迎使用', lines: '' }; // 重置诗歌数据为初始欢迎消息
+      this.poem = ''; // 重置诗歌数据为初始欢迎消息
       this.loading = false;
     },
   },
   watch: {
     inputText(newText) {
       if (newText) {
-        this.loading = true; // 输入文本存在时，显示加载状态
+        //this.loading = true; // 输入文本存在时，显示加载状态
         // 模拟从后端接收数据的异步操作
         setTimeout(() => {
           // 假设后端返回的数据
-          this.updatePoemData('新生成的诗歌', '床前明月光，疑是地上霜。举头望明月，低头思故乡。');
+          this.updatePoemData(this.poem);
         }, 1000);
       } else {
         this.resetPoemData(); // 重置诗歌数据
@@ -239,7 +243,7 @@ export default {
 }
 
 .navbar1 li:hover {
-  background-color: rgba(238, 204, 140, 0.68); /* 鼠标悬浮时更深的背景色 */
+  background-color: rgba(210, 180, 124, 0.68); /* 鼠标悬浮时更深的背景色 */
 }
 
 .navbar1 .active {

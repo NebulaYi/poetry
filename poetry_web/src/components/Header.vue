@@ -1,11 +1,9 @@
 <template>
   <header class="header">
-
-    <el-button @click="test">test</el-button>
     <!-- 右上角用户设置 -->
     <el-dropdown @command="handleCommand">
-      <span class="el-dropdown-link">
-        {{ $store.state.user.uName }}<el-icon class="el-icon--right"><ArrowDown /></el-icon>
+      <span class="el-dropdown-link" :key="uName">
+        {{ uName  }}<el-icon class="el-icon--right"><ArrowDown /></el-icon>
       </span>
       <template #dropdown>
         <el-dropdown-menu>
@@ -40,7 +38,7 @@
 
     <!-- 修改信息（昵称）对话框 -->
     <el-dialog v-model="dialogFormVisible2" title="修改信息" width="500">
-      <span>当前昵称: {{ $store.state.user.uName }}</span>
+      <span>当前昵称: {{ uName }}</span>
       <el-input v-model="newName" type="uname" autocomplete="off" />
       <template v-slot:footer>
         <span class="dialog-footer">
@@ -55,8 +53,7 @@
 <script>
 import { ArrowDown } from '@element-plus/icons-vue'
 import router from '../router'
-import {put, get} from '@/axios/http'
-//import axios from "axios";
+import {put} from '@/axios/http'
 
 export default {
   name: 'Header',
@@ -65,6 +62,7 @@ export default {
   },
   data() {
     return {
+      uName: sessionStorage.getItem("uName"),
       dialogFormVisible1: false,
       dialogFormVisible2: false,
       formLabelWidth: '90px',
@@ -81,19 +79,18 @@ export default {
     dynamicHistoryText() {
       // 根据当前路由判断显示文本
       return this.$route.path === '/history' ? '回到首页' : '历史记录';
-    }
+    },
   },
   methods: {
-    async test(){
-      const r = await get('/api/v1.0/test')
-      console.log(r)
-      if(r.code === 1){
-        this.$message.success(111);
-      }else{
-        this.$message.error(r.msg);
-      }
-    },
-
+    // async test(){
+    //   const r = await get('/api/v1.0/test')
+    //   console.log(r)
+    //   if(r.code === 1){
+    //     this.$message.success(111);
+    //   }else{
+    //     this.$message.error(r.msg);
+    //   }
+    // },
 
     /*
     处理下拉设置的逻辑
@@ -133,38 +130,33 @@ export default {
     clearAuthToken() {
       // 清除token的逻辑
       // 例如: localStorage.removeItem('token');
+      sessionStorage.clear();
     },
     /*
     提交密码修改
      */
     async confirmPasswordChange() {
-      if(this.codeForm.oldPwd === this.$store.state.user.uPwd){
+      if(this.codeForm.oldPwd === sessionStorage.getItem('uPassword')){
         if (this.codeForm.newPwd1 === this.codeForm.newPwd2) {
           // 密码匹配，提交更改
-          // try {
-          //   await axios.post('http://10.135.2.25:5000/api/v1.0/user/modifyPassword', {
-          //     email: "user@email.com",
-          //     originPsw: "password",
-          //     currentPsw: "password1"
-          //   });
-          //
-          // } catch (error) {
-          //   console.error('密码数据出错:', error);
-          // }
-          const respCode = await put('/api/v1.0/user/modifyPassword', {
-            email: "user@email.com",
-            originPsw: "password",
-            currentPsw: "password1"
-          });
-          if(respCode.code === 1){
-            this.$message.success('密码修改成功！');
-            //更新存储的用户密码
-            this.$store.state.user.uPwd = this.codeForm.newPwd1;
-            this.dialogFormVisible1 = false;
-          }else{
-            this.$message.error(respCode.msg);
+          try {
+            const response = await put("/api/v1.0/user/modifyPassword", {
+              email: sessionStorage.getItem('uEmail'),
+              originPsw: this.codeForm.oldPwd,
+              currentPsw: this.codeForm.newPwd1
+            });
+            console.log("登录："+response)
+            if (response.code === 1) {
+              sessionStorage.setItem("uPassword", this.codeForm.newPwd1)
+              console.log("密码："+sessionStorage.getItem("uPassword"))
+              this.dialogFormVisible1 = false;
+              this.$message.success("修改成功！");
+            } else {
+              this.$message.error("修改失败！"+response.msg);
+            }
+          } catch (error) {
+            console.error(error);
           }
-
         } else {
           // 密码不匹配，提示用户
           this.$message.error('两次输入的密码不一致');
@@ -180,20 +172,29 @@ export default {
     async confirmNameChange() {
       if(this.newName){
         // 输入不为空，提交更改
-        // const respName = await put('', this.newName);
-        // if(respName.code === 1){
-        //   ElMessage.success(this.newName + '信息修改成功！');
-        //   //更新存储的用户名
-        //   this.$store.state.user.uName = this.newName;
-        //   this.dialogFormVisible2 = false;
-        // }else{
-        //   ElMessage.error(respName.msg);
-        // }
+        try {
+          const respName = await put('/api/v1.0/user/modifyUsername', {
+            email: sessionStorage.getItem('uEmail'),
+            username: this.newName,
+          });
+          if(respName.code === 1){
+            this.$message.success(this.newName + '信息修改成功！');
+            //更新存储的用户名
+            console.log(sessionStorage.getItem('uName'),)
+            sessionStorage.setItem('uName', this.newName);
+            this.uName = this.newName; // 这里直接更新 uName 来触发视图更新
+            this.dialogFormVisible2 = false;
+          }else{
+            this.$message.error(respName.msg);
+          }
+        } catch (error) {
+          console.error(error);
+        }
       } else{
         this.$message.error('姓名不得为空！');
       }
     },
-  }
+  },
 }
 </script>
 

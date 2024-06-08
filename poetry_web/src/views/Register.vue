@@ -13,13 +13,13 @@
         </template>
         <el-form @submit.prevent="handleRegister" label-width="auto">
           <el-form-item label="用户名">
-            <el-input v-model="username" placeholder="请输入用户名" clearable></el-input>
+            <el-input v-model="user_name" placeholder="请输入用户名" clearable></el-input>
           </el-form-item>
           <el-form-item label="邮箱">
-            <el-input type="email" v-model="email" placeholder="请输入邮箱" clearable></el-input>
+            <el-input type="email" v-model="user_email" placeholder="请输入邮箱" clearable></el-input>
           </el-form-item>
           <el-form-item label="密码">
-            <el-input type="password" v-model="password" placeholder="请输入密码" clearable></el-input>
+            <el-input type="password" v-model="user_password" placeholder="请输入密码" clearable></el-input>
           </el-form-item>
           <el-button type="primary" @click="handleRegister">注册</el-button>
           <span class="login-text" :style="{ marginTop: '10px' }">已有账户？<router-link to="/login" class="highlight">登录</router-link></span>
@@ -30,13 +30,15 @@
 </template>
 
 <script>
+import {post} from "@/axios/http";
+
 export default {
   name: 'Register',
   data() {
     return {
-      username: '',
-      email: '',
-      password: '',
+      user_name: '',
+      user_email: '',
+      user_password: '',
       fullWidth: document.documentElement.clientWidth,
       fullHeight: document.documentElement.clientHeight,
     }
@@ -50,9 +52,29 @@ export default {
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
-    handleRegister() {
-      // 实现注册逻辑
-      this.$router.push('/home')
+    async handleRegister() {
+      try {
+        console.log(this.user_password)
+        const response = await post("/api/v1.0/user/register", {
+          username: this.user_name,
+          email: this.user_email,
+          password: this.user_password,
+        });
+        if (response.code === 1) {
+          sessionStorage.setItem("uName", this.user_name)
+          sessionStorage.setItem("uEmail", this.user_email)
+          sessionStorage.setItem("uPassword", this.user_password)
+          console.log("用户名："+sessionStorage.getItem("uName"))
+          console.log("账号："+sessionStorage.getItem("uEmail"))
+          console.log("密码："+sessionStorage.getItem("uPassword"))
+          this.$router.push('/home')
+          this.$message.success("注册成功！");
+        } else {
+          this.$message.error("注册失败！"+response.msg);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     },
     // 处理设备宽高
     handleResize () {
