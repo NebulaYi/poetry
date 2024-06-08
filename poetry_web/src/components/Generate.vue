@@ -42,7 +42,8 @@
           </p>
         </div>
         <!-- 加载状态提示 -->
-        <div v-else-if="loading" class="loading-content">
+        <div v-else-if="loading"
+             class="loading-content">
           加载中...
         </div>
         <!-- 默认欢迎消息 -->
@@ -204,7 +205,6 @@ export default {
 </script>
 
 <style>
-
 /*
 选择
  */

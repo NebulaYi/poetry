@@ -4,6 +4,16 @@
   </div>
   <div class="historyView">
     <Header />
+
+    <nav class="navbar">
+      <ul>
+        <li v-for="style in styles" :key="style"
+            :class="{ active: style === selectedStyle }"
+            @click="selectStyle(style)">{{ style }}
+        </li>
+      </ul>
+    </nav>
+
     <!-- 无限滚动的诗歌列表容器 -->
     <ul
         v-infinite-scroll="loadMore"
@@ -11,13 +21,17 @@
         style="overflow: auto;"
     >
       <li
-          v-for="poem in poems"
+          v-for="poem in filteredPoems"
           :key="poem.id"
           class="infinite-list-item"
       >
         <div class="poem">
-          <p class="poem-title">输入: {{ poem.description }}</p>
-          <p class="poem-style">风格: {{ poem.style }}</p>
+          <div class="poem-st">
+            <p class="poem-index">选择: {{ poem.functionName }}</p>
+            <p class="poem-input">输入: {{ poem.description }}</p>
+            <p class="poem-style">体裁: {{ poem.style }}</p>
+          </div>
+          <!-- 确保 result 标签独立占据一行 -->
           <p class="poem-result">{{ poem.result }}</p>
         </div>
       </li>
@@ -29,11 +43,28 @@
 <script setup>
 import Header from "../components/Header.vue";
 import Footer from '../components/Footer.vue';
-import { ref } from 'vue';
+import {computed, ref} from 'vue';
 import {post} from "@/axios/http";
 
 const imgSrc = require('../assets/img.jpg');
 const poems = ref([]);
+
+const styles = ['全部记录','五言绝句', '五言律诗', '七言绝句', '七言律诗'];
+// 当前选中的风格
+const selectedStyle = ref('全部记录');
+
+// 根据选中的风格过滤诗歌列表的方法
+const filteredPoems = computed(() => {
+  return poems.value.filter(poem =>
+      selectedStyle.value === '全部记录' || poem.style === selectedStyle.value
+  );
+});
+
+// 选择风格的处理函数
+const selectStyle = (style) => {
+  return selectedStyle.value = style;
+};
+
 //获取历史记录的函数
 const fetchHistory = async () => {
   try {
@@ -48,6 +79,7 @@ const fetchHistory = async () => {
 
 // 组件挂载后获取数据
 fetchHistory();
+
 
 const loadMore = () => {
   // 这里可以添加逻辑来加载更多的诗歌
@@ -93,6 +125,63 @@ const loadMore = () => {
   margin-bottom: 20px;
   border-bottom: 1px solid #ddd;
   padding-bottom: 20px;
+}
+
+.poem-st {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.poem-index,
+.poem-input,
+.poem-style {
+  margin: 5px 16px; /* 根据需要添加上下边距 */
+}
+
+.poem-result {
+  width: 100%; /* 占满整行 */
+  font-size: larger; /* 加大字体 */
+  margin-top: 10px; /* 添加上边距 */
+}
+
+/*
+选择体裁
+ */
+.navbar {
+  width: 60%; /* 展示内容区域宽度 */
+  background-color: transparent;
+  color: rgb(29, 31, 31);
+  margin: 20px auto;
+}
+
+.navbar ul {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-around; /* 均匀分布空间 */
+  padding: 0;
+  margin: 0;
+}
+
+.navbar li {
+  flex: 1; /* 每个li元素占据相等空间 */
+  cursor: pointer;
+  text-align: center; /* 文本居中 */
+  background-color: transparent; /* 初始背景色 */
+  transition: background-color 0.3s; /* 平滑过渡背景色变化 */
+  margin: 0 8px;
+  border-radius: 8px;
+  height: 28px;
+}
+
+.navbar li:hover {
+  background-color: rgb(187, 156, 29); /* 鼠标悬浮时更深的背景色 */
+  color: white;
+}
+
+.navbar li.active {
+  background-color: rgb(55, 114, 25); /* 选中时的背景色 */
+  color: white;
 }
 
 </style>
