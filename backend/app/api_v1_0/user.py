@@ -181,3 +181,10 @@ def modifyPassword():
         return jsonify(msg='修改成功',code=1,data=[])
     except Exception as e:
         return jsonify(msg='异常',code=6,data=[])
+
+
+
+@api.route("/test", methods=["GET"])
+def test():
+    return jsonify(msg='收到',code=1,data=[])
+

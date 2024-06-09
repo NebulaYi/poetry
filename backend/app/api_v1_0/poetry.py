@@ -19,8 +19,7 @@ def acrosticGenerate():
     """
     """if is_login(request) == 1:
         return formatData(code=6, msg="用户未登录")"""
-    result=""
-    #result=generate_samples(prefix=style+"[SEP]"+question,length=style_length_acrosticGenerate[style]);
+    result=generate_samples(prefix=style+"[SEP]"+question,length=style_length_acrosticGenerate[style]);
     if saveHistoryRecord(email=email, style=style, functionName="藏头诗", question=question, answer=result):
         return formatData_str(code=1, msg="成功生成", list=result)
     else:
@@ -40,8 +39,7 @@ def customizeGenerate():
         """
     """if is_login(request) == 1:
         return formatData(code=6, msg="用户未登录")"""
-    result = ""
-    #result=generate_samples(prefix=style+"[SEP]"+question,length=style_length_customizeGenerate[style]+addCount[style]-len(question));
+    result=generate_samples(prefix=style+"[SEP]"+question,length=style_length_customizeGenerate[style]+addCount[style]-len(question));
     if saveHistoryRecord(email=email,style=style,functionName="自定义风格", question=question, answer=result):
         return formatData_str(code=1,msg="成功生成",list=result)
     else:
