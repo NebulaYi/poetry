@@ -32,7 +32,7 @@
             <p class="poem-style">体裁: {{ poem.style }}</p>
           </div>
           <!-- 确保 result 标签独立占据一行 -->
-          <p class="poem-result">{{ poem.result }}</p>
+          <p class="poem-result" v-for="(line, index) in splitResult(poem.result)" :key="index">{{ line }}</p>
         </div>
       </li>
     </ul>
@@ -59,7 +59,7 @@ const filteredPoems = computed(() => {
       selectedStyle.value === '全部记录' || poem.style === selectedStyle.value
   );
 });
-
+const splitResult = (text) => text.split('。');
 // 选择风格的处理函数
 const selectStyle = (style) => {
   return selectedStyle.value = style;
@@ -113,7 +113,7 @@ const loadMore = () => {
 
 .infinite-list {
   width: 60%; /* 展示内容区域宽度 */
-  height: 60%; /* 展示内容区域高度 */
+  height: 65%; /* 展示内容区域高度 */
   padding: 20px;
   margin: auto;
   overflow-y: scroll; /* 允许垂直滚动，但隐藏滚动条 */
@@ -172,6 +172,7 @@ const loadMore = () => {
   margin: 0 8px;
   border-radius: 8px;
   height: 28px;
+  font-size: 20px;
 }
 
 .navbar li:hover {
@@ -180,7 +181,7 @@ const loadMore = () => {
 }
 
 .navbar li.active {
-  background-color: rgb(55, 114, 25); /* 选中时的背景色 */
+  background-color: rgb(187, 156, 29); /* 选中时的背景色 */
   color: white;
 }
 
