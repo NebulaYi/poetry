@@ -138,7 +138,7 @@ export default {
     提交密码修改
      */
     async confirmPasswordChange() {
-      if(this.codeForm.oldPwd === sessionStorage.getItem('uPassword')){
+      if(this.codeForm.oldPwd){
         if (this.codeForm.newPwd1 === this.codeForm.newPwd2) {
           // 密码匹配，提交更改
           try {
@@ -165,7 +165,7 @@ export default {
         }
       } else{
         // 原密码错误
-        this.$message.error('原密码错误！');
+        this.$message.error('请输入原密码！');
       }
     },
     /*
