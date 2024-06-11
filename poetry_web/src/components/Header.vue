@@ -22,7 +22,9 @@
           <el-input v-model="codeForm.oldPwd" type="password" autocomplete="off" />
         </el-form-item>
         <el-form-item label="新密码：" :label-width="formLabelWidth">
-          <el-input v-model="codeForm.newPwd1" type="password" autocomplete="off" />
+          <el-tooltip content="由8-16位数字、大小写英文组成，不含特殊字符" placement="bottom">
+            <el-input v-model="codeForm.newPwd1" type="password" autocomplete="off" />
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="确认密码：" :label-width="formLabelWidth">
           <el-input v-model="codeForm.newPwd2" type="password" autocomplete="off" />
@@ -210,11 +212,25 @@ export default {
   display: flex;
   align-items: center;
   margin-right: 64px;
-  font-size: 18px;
+  font-size: 24px;
+  font-weight: bold;
+  font-family: '楷体', 'KaiTi', '楷体_GB2312';
   cursor: pointer;
 }
 .dialog-footer {
   display: flex;
   justify-content: center;
+}
+
+
+.el-popper.is-customized {
+  /* Set padding to ensure the height is 32px */
+  padding: 6px 12px;
+  background: linear-gradient(90deg, rgb(159, 229, 151), rgb(204, 229, 129));
+}
+
+.el-popper.is-customized .el-popper__arrow::before {
+  background: linear-gradient(45deg, #b2e68d, #bce689);
+  right: 0;
 }
 </style>

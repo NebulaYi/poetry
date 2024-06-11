@@ -279,7 +279,7 @@ export default {
   margin: 0 8px;
   border-radius: 8px;
   height: 28px;
-
+  padding: 4px 0;
   font-size: 18px;
 }
 

@@ -173,6 +173,7 @@ const loadMore = () => {
   border-radius: 8px;
   height: 28px;
   font-size: 20px;
+  padding: 4px 0;
 }
 
 .navbar li:hover {
@@ -181,7 +182,7 @@ const loadMore = () => {
 }
 
 .navbar li.active {
-  background-color: rgb(187, 156, 29); /* 选中时的背景色 */
+  background-color: rgb(176, 147, 28); /* 选中时的背景色 */
   color: white;
 }
 

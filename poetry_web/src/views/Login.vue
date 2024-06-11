@@ -16,7 +16,9 @@
             <el-input prefix-icon="User" v-model="user.user_email" clearable type="email" placeholder="请输入账号"></el-input>
           </el-form-item>
           <el-form-item prop="user_password" label="密码">
-            <el-input prefix-icon="Lock" v-model="user.user_password" clearable type="password" placeholder="请输入密码"></el-input>
+            <el-tooltip content="由8-16位数字、大小写英文组成，不含特殊字符" placement="bottom">
+              <el-input prefix-icon="Lock" v-model="user.user_password" clearable type="password" placeholder="请输入密码"></el-input>
+            </el-tooltip>
           </el-form-item>
           <el-button type="primary" @click="login" >登录</el-button>
           <span class="register-text" :style="{ marginTop: '10px' }">没有账号？请<span class="highlight" @click="register">注册</span></span>
@@ -155,5 +157,16 @@ export default {
 .highlight {
   color: #409EFF;
   cursor: pointer;
+}
+
+.el-popper.is-customized {
+  /* Set padding to ensure the height is 32px */
+  padding: 6px 12px;
+  background: linear-gradient(90deg, rgb(159, 229, 151), rgb(204, 229, 129));
+}
+
+.el-popper.is-customized .el-popper__arrow::before {
+  background: linear-gradient(45deg, #b2e68d, #bce689);
+  right: 0;
 }
 </style>
