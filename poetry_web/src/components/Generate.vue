@@ -239,6 +239,8 @@ export default {
   background-color: rgba(132, 110, 78, 0.6); /* 背景色 */
   border-radius: 10px;
   height:32px;
+
+  font-size: 20px;
 //transition: background-color 0.3s; /* 平滑过渡背景色变化 */
 }
 
@@ -277,6 +279,8 @@ export default {
   margin: 0 8px;
   border-radius: 8px;
   height: 28px;
+  padding: 4px 0;
+  font-size: 18px;
 }
 
 .navbar2 li:hover {
@@ -285,7 +289,7 @@ export default {
 }
 
 .navbar2 .active {
-  background-color: rgb(55, 114, 25); /* 选中时的背景色 */
+  background-color: rgb(187, 156, 29); /* 选中时的背景色 */
   color: white;
 }
 

@@ -19,7 +19,9 @@
             <el-input type="email" v-model="user_email" placeholder="请输入邮箱" clearable></el-input>
           </el-form-item>
           <el-form-item label="密码">
-            <el-input type="password" v-model="user_password" placeholder="请输入密码" clearable></el-input>
+            <el-tooltip content="由8-16位数字、大小写英文组成，不含特殊字符" placement="bottom">
+              <el-input type="password" v-model="user_password" placeholder="请输入密码" clearable></el-input>
+            </el-tooltip>
           </el-form-item>
           <el-button type="primary" @click="handleRegister">注册</el-button>
           <span class="login-text" :style="{ marginTop: '10px' }">已有账户？<router-link to="/login" class="highlight">登录</router-link></span>
@@ -138,5 +140,16 @@ export default {
 .highlight {
   color: #409EFF;
   cursor: pointer;
+}
+
+.el-popper.is-customized {
+  /* Set padding to ensure the height is 32px */
+  padding: 6px 12px;
+  background: linear-gradient(90deg, rgb(159, 229, 151), rgb(204, 229, 129));
+}
+
+.el-popper.is-customized .el-popper__arrow::before {
+  background: linear-gradient(45deg, #b2e68d, #bce689);
+  right: 0;
 }
 </style>
