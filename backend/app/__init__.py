@@ -14,7 +14,7 @@ def create_app():
     :return:
     """
     app=Flask(__name__,template_folder='templates')
-    app.config['SQLALCHEMY_DATABASE_URI']="mysql://root:root@10.135.2.25/movieweb"
+    app.config['SQLALCHEMY_DATABASE_URI']="mysql://root:root@localhost/movieweb"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=True
     app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN']=True
     app.config['JWT_SECRET_KEY'] = 'my_secret_key'
